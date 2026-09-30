@@ -9,6 +9,8 @@ const valorTam = document.getElementById("valorTam");
 
 let moviendo = false;
 
+const numMinas = document.getElementById("numMinas");
+
 
 // CREADOR TABLERO
 function crearTablero() {
@@ -19,12 +21,63 @@ function crearTablero() {
     // Indicamos el tamaño al CSS
     tablero.style.setProperty("--tamano", tamano);
 
+    // Número de minas seleccionadas
+    const cantidadMinas = Number(numMinas.value);
+
+    // Creamos una lista con todas las posiciones posibles
+    const posiciones = [];
+
+    for (let i = 0; i < tamano * tamano; i++) {
+        posiciones.push(i);
+    }
+
+    // Mezclamos aleatoriamente las posiciones
+    posiciones.sort(() => Math.random() - 0.5);
+
+    // Las primeras posiciones serán minas
+    const posicionesMinas = posiciones.slice(0, cantidadMinas);
+
     // Creamos las casillas
     for (let i = 0; i < tamano * tamano; i++) {
 
         const casilla = document.createElement("div");
         casilla.classList.add("casilla");
+
+        // Contenido que realizará el giro
+        const contenido = document.createElement("div");
+        contenido.classList.add("contenidoCasilla");
+
+        // Cara delantera
+        const frente = document.createElement("div");
+        frente.classList.add("frente");
+
+        // Cara trasera
+        const reverso = document.createElement("div");
+        reverso.classList.add("reverso");
+
+        // Comprobamos si esta casilla es una mina
+        if (posicionesMinas.includes(i)) {
+            reverso.classList.add("mina");
+        }
+
+        // Montar las dos caras
+        contenido.appendChild(frente);
+        contenido.appendChild(reverso);
+
+        casilla.appendChild(contenido);
         tablero.appendChild(casilla);
+
+        // GIRAR CASILLA
+        casilla.addEventListener("click", function() {
+
+            // Si ya está volteada, no hacemos nada
+            if (casilla.classList.contains("volteada")) {
+                return;
+            }
+
+            // Volteamos la casilla
+            casilla.classList.add("volteada");
+        });
     }
 }
 
@@ -38,6 +91,9 @@ function actualizarSelectorTam() {
     // Posición del punto
     const porcentaje = (tamano - 3) / (9 - 3);
     puntoContTam.style.left = `${porcentaje * 100}%`;
+
+    // Actualizar cantidad máxima de minas
+    actualizarMaxMinas();
 }
 
 
@@ -100,6 +156,34 @@ lineaContTam.addEventListener("pointerdown", function(event) {
     cambiarTam(event);
 });
 
+
+// ACTUALIZADOR NUMERO DE MINAS
+function actualizarMaxMinas() {
+
+    const numeroCasillas = tamano * tamano;
+    const maxMinas = numeroCasillas - 1;
+
+    numMinas.max = maxMinas;
+
+    // Si el valor actual supera el máximo,
+    // lo reducimos automáticamente
+    if (Number(numMinas.value) > maxMinas) {
+        numMinas.value = maxMinas;
+    }
+}
+
+numMinas.addEventListener("input", function() {
+    const maxMinas = tamano * tamano - 1;
+    let minas = Number(numMinas.value);
+
+    if (minas < 1) {
+        numMinas.value = 1;
+    }
+
+    if (minas > maxMinas) {
+        numMinas.value = maxMinas;
+    }
+});
 
 // INICIALIZAR
 crearTablero();
