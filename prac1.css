@@ -1,18 +1,134 @@
 body {
     font-family: Arial, sans-serif;
     text-align: center;
+    margin: 0;
 }
 
-#tablero { 
-    display: grid;
-    grid-template-columns: repeat(var(--tamano), 1fr);
-    width: 400px; 
-    height: 400px; 
-} 
+/* TITULO */
+#titulo {
+        text-align: center;
+        font-size: 50px;
+        font-family: Arial, sans-serif;
+        margin-top: 40px;
+        margin-bottom: 40px;
+    }
 
-.casilla { 
-    border: 1px solid black; 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; box-sizing: border-box; 
+ /* ZONA PRINCIPAL*/   
+#zonaPrincipal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    width: 100%;
+}
+
+/* TABLERO */
+#tablero {
+    display: grid;
+
+    grid-template-columns: repeat(var(--tamano), 1fr);
+    grid-template-rows: repeat(var(--tamano), 1fr);
+
+    width: 450px;
+    height: 450px;
+    margin: 0;
+}
+
+.casilla {
+
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+/*PANEL LATERAL*/
+
+#panelLateral {
+    width: 260px;
+    height: 450px;
+    border: 1px solid black;
+    border-radius: 8px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 25px 20px;
+}
+
+
+/* CONTROLADOR DEL TAMAÑO */
+
+#controlTam {
+    width: 100%;
+    margin: 0;
+}
+
+#tituloTam {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+#tituloTam span {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#valorTam {
+    min-width: 58px;
+    height: 38px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+    border-radius: 6px;
+    font-size: 17px;
+    font-weight: bold;
+    box-sizing: border-box;
+}
+
+#selectorTam {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.extremo {
+    font-size: 16px;
+    font-weight: bold;
+    width: 15px;
+    flex-shrink: 0;
+}
+
+#lineaContTam {
+    position: relative;
+    flex: 1;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    min-width: 0;
+}
+
+#lineaContTam::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background-color: black;
+}
+
+#puntoContTam {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: black;
+    transform: translateX(-50%);
+    cursor: grab;
 }

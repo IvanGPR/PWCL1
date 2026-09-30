@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width", initial-scale="1.0">
 
-    <title>Practica 1</title>
+    <title>Mines</title>
 
     <link href="./prac1.css" rel="stylesheet" type="text/css">
     <script type="text/javascript" src="./prac1.js" defer></script>
@@ -12,8 +12,36 @@
 
 </head>
 <body>
+    <h1 id="titulo">MINES</h1>
 
-    <div id="tablero"></div>
+    <div id="zonaPrincipal">
 
+
+        <!--Rectangulo lateral-->
+        <div id="panelLateral">
+            <!--Modificador del tamaño-->
+            <div id="controlTam">
+
+                <div id="tituloTam">
+                    <span>Tamaño de tabla</span>
+                    <div id="valorTam">3x3</div>
+                </div>
+
+                <div id="selectorTam">
+                    <span class="extremo">3</span>
+
+                    <div id="lineaContTam">
+                        <div id="puntoContTam"></div>
+                    </div>
+
+                    <span class="extremo">9</span>
+                </div>
+            </div>
+        </div>
+
+        <!--Creador tablero-->
+        <div id="tablero"></div>
+    </div>
+    
 </body>
 </html>
