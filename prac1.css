@@ -208,3 +208,33 @@ body {
     font-size: 17px;
     font-weight: bold;
 }
+
+#apostar{
+    width: 200px;
+    height: 100px;
+    box-sizing: border-box;
+    border: 1px solid black;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 17px;
+    font-weight: bold;
+    margin-top: 50px;
+    margin-bottom: 25px;
+}
+
+
+#tituloApuesta span {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#cantApuesta {
+    width: 70px;
+    height: 40px;
+    box-sizing: border-box;
+    border: 1px solid black;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 17px;
+    font-weight: bold;
+}

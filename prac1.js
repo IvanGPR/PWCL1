@@ -10,7 +10,8 @@ const valorTam = document.getElementById("valorTam");
 let moviendo = false;
 
 const numMinas = document.getElementById("numMinas");
-
+const apostar = document.querySelector("#apostar");
+const cantApuesta = document.getElementById("cantApuesta");
 
 // CREADOR TABLERO
 function crearTablero() {
@@ -57,7 +58,7 @@ function crearTablero() {
 
         // Comprobamos si esta casilla es una mina
         if (posicionesMinas.includes(i)) {
-            reverso.classList.add("mina");
+            reverso.classList.add("reversoMina");
         }
 
         // Montar las dos caras
@@ -183,6 +184,21 @@ numMinas.addEventListener("input", function() {
     if (minas > maxMinas) {
         numMinas.value = maxMinas;
     }
+    crearTablero();
+});
+
+apostar.addEventListener("click", ()=>{
+
+})
+
+cantApuesta.addEventListener("input", function(){
+    const maxApuesta=1000;
+    let apuesta = Number(cantApuesta.value)
+    
+    if(apuesta>maxApuesta){
+        cantApuesta.value = maxApuesta;
+    }
+
 });
 
 // INICIALIZAR
