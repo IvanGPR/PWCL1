@@ -70,6 +70,10 @@ function crearTablero() {
 
         // GIRAR CASILLA
         casilla.addEventListener("click", function() {
+            // Si el botón sigue siendo APOSTAR, no se puede pulsar
+            if (apostar.textContent === "APOSTAR") {
+                return;
+            }
 
             // Si ya está volteada, no hacemos nada
             if (casilla.classList.contains("volteada")) {
@@ -187,9 +191,28 @@ numMinas.addEventListener("input", function() {
     crearTablero();
 });
 
-apostar.addEventListener("click", ()=>{
+apostar.addEventListener("click", function() {
 
-})
+    if (numMinas.value === "" && cantApuesta.value === ""){
+        alert("Debes introducir el número de minas y  una cantidad para la apuesta");
+        return;
+    }
+    // Comprobamos si se ha introducido el número de minas
+    if (numMinas.value === "") {
+        alert("Debes introducir el número de minas");
+        return;
+    }
+
+    // Comprobamos si se ha introducido la cantidad de apuesta
+    if (cantApuesta.value === "") {
+        alert("Debes introducir una cantidad para la apuesta");
+        return;
+    }
+
+    // Si todo está rellenado, cambiamos el botón
+    apostar.textContent = "OBTENER";
+
+});
 
 cantApuesta.addEventListener("input", function(){
     const maxApuesta=1000;
@@ -200,6 +223,27 @@ cantApuesta.addEventListener("input", function(){
     }
 
 });
+
+function calculadoraPorcentajeGanacias(){
+    let listaPorcentajes=[1,2,3];
+    let numMinas=3;
+    let casillasTapadas=20;
+    listaPorcentajes[listaPorcentajes.length++]=(casillasTapadas-numMinas)/casillasTapadas;
+    //Probabilidad Acumulada
+    let probAcumulada=1;
+    for(let i; i<listaPorcentajes.length; i++){
+        probAcumulada=probAcumulada*listaPorcentajes[i];
+    }
+    multiplicador=1/probAcumulada;
+    return multiplicador;
+}
+
+function calculadoraGanacias(cantApuesta){
+    let porcentajeGanancia = calculadoraPorcentajeGanacias();
+    ganancia=porcentajeGanancia*cantApuesta;
+    return ganancia;
+}
+
 
 // INICIALIZAR
 crearTablero();
