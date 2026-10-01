@@ -13,6 +13,10 @@ const numMinas = document.getElementById("numMinas");
 const apostar = document.querySelector("#apostar");
 const cantApuesta = document.getElementById("cantApuesta");
 
+const multiplicadores = document.getElementById("multiplicadores");
+let casillasSegurasDestapadas = 0;
+let listaMultiplicadores = [];
+
 // CREADOR TABLERO
 function crearTablero() {
 
@@ -70,18 +74,36 @@ function crearTablero() {
 
         // GIRAR CASILLA
         casilla.addEventListener("click", function() {
-            // Si el botón sigue siendo APOSTAR, no se puede pulsar
+
+            // No se pueden pulsar casillas antes de apostar
             if (apostar.textContent === "APOSTAR") {
                 return;
             }
 
-            // Si ya está volteada, no hacemos nada
+            // Una casilla solo puede pulsarse una vez
             if (casilla.classList.contains("volteada")) {
                 return;
             }
 
+            // Comprobamos si esta casilla es una mina
+            const esMina = reverso.classList.contains("reversoMina");
+
             // Volteamos la casilla
             casilla.classList.add("volteada");
+
+            // Si NO es una mina
+            if (!esMina) {
+
+                casillasSegurasDestapadas++;
+                // Actualizamos los multiplicadores
+                actualizarMultiplicadores();
+            }
+
+            // Si es una mina
+            else {
+                // De momento solamente mostramos un mensaje
+                alert("¡Has encontrado una mina!");
+            }
         });
     }
 }
@@ -119,8 +141,12 @@ function cambiarTam(event) {
 
     tamano = 3 + Math.round(porcentaje * 6);
 
-    crearTablero();
-    actualizarSelectorTam();
+    casillasSegurasDestapadas = 0;
+
+    crearTablero(); 
+    actualizarSelectorTam(); 
+    calcularMultiplicadores();
+    actualizarMultiplicadores();
 }
 
 
@@ -188,7 +214,11 @@ numMinas.addEventListener("input", function() {
     if (minas > maxMinas) {
         numMinas.value = maxMinas;
     }
+    casillasSegurasDestapadas = 0;
+
     crearTablero();
+    calcularMultiplicadores();
+    actualizarMultiplicadores();
 });
 
 apostar.addEventListener("click", function() {
@@ -224,27 +254,50 @@ cantApuesta.addEventListener("input", function(){
 
 });
 
-function calculadoraPorcentajeGanacias(){
-    let listaPorcentajes=[1,2,3];
-    let numMinas=3;
-    let casillasTapadas=20;
-    listaPorcentajes[listaPorcentajes.length++]=(casillasTapadas-numMinas)/casillasTapadas;
-    //Probabilidad Acumulada
-    let probAcumulada=1;
-    for(let i; i<listaPorcentajes.length; i++){
-        probAcumulada=probAcumulada*listaPorcentajes[i];
+function calcularMultiplicadores() {
+
+    listaMultiplicadores = [];
+
+    const totalCasillas = tamano * tamano;
+    const minas = Number(numMinas.value);
+    const casillasSeguras = totalCasillas - minas;
+
+    let probabilidadAcumulada = 1;
+
+    for (let i = 0; i < casillasSeguras; i++) {
+
+        const casillasRestantes = totalCasillas - i;
+        const segurasRestantes = casillasSeguras - i;
+
+        const probabilidad =segurasRestantes / casillasRestantes;
+
+        probabilidadAcumulada =probabilidadAcumulada * probabilidad;
+
+        const multiplicador = 1 / probabilidadAcumulada;
+
+        listaMultiplicadores.push(multiplicador);
     }
-    multiplicador=1/probAcumulada;
-    return multiplicador;
-}
-
-function calculadoraGanacias(cantApuesta){
-    let porcentajeGanancia = calculadoraPorcentajeGanacias();
-    ganancia=porcentajeGanancia*cantApuesta;
-    return ganancia;
 }
 
 
-// INICIALIZAR
-crearTablero();
+function actualizarMultiplicadores() {
+
+    multiplicadores.innerHTML = "";
+
+    const inicio = casillasSegurasDestapadas;
+
+    const fin = Math.min(inicio + 6,listaMultiplicadores.length);
+
+    for (let i = inicio; i < fin; i++) {
+        const elemento = document.createElement("div");
+        elemento.classList.add("multiplicador");
+        elemento.textContent =`x${listaMultiplicadores[i].toFixed(2)}`;
+        multiplicadores.appendChild(elemento);
+    }
+}
+
+// INICIALIZAR 
+crearTablero(); 
 actualizarSelectorTam();
+calcularMultiplicadores();
+actualizarMultiplicadores();
