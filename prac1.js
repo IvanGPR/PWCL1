@@ -1,6 +1,7 @@
 
 let tamano = 3;
 
+let partidaActiva = false;
 const tablero = document.getElementById("tablero");
 
 const lineaContTam = document.getElementById("lineaContTam");
@@ -16,6 +17,12 @@ const cantApuesta = document.getElementById("cantApuesta");
 const multiplicadores = document.getElementById("multiplicadores");
 let casillasSegurasDestapadas = 0;
 let listaMultiplicadores = [];
+
+const cantidadSueldo = document.getElementById("cantidadSueldo");
+const cantidadObtener = document.getElementById("cantidadObtener");
+const textoBoton = document.getElementById("textoBoton");
+let sueldo = 1000;
+let apuestaActual = 0;
 
 // CREADOR TABLERO
 function crearTablero() {
@@ -75,8 +82,8 @@ function crearTablero() {
         // GIRAR CASILLA
         casilla.addEventListener("click", function() {
 
-            // No se pueden pulsar casillas antes de apostar
-            if (apostar.textContent === "APOSTAR") {
+            // No se pueden pulsar casillas antes de empezar partida
+            if (!partidaActiva) {
                 return;
             }
 
@@ -97,12 +104,14 @@ function crearTablero() {
                 casillasSegurasDestapadas++;
                 // Actualizamos los multiplicadores
                 actualizarMultiplicadores();
+                actualizarCantidadObtener();
             }
 
             // Si es una mina
             else {
                 // De momento solamente mostramos un mensaje
                 alert("¡Has encontrado una mina!");
+                reiniciarPartida();
             }
         });
     }
@@ -222,26 +231,55 @@ numMinas.addEventListener("input", function() {
 });
 
 apostar.addEventListener("click", function() {
+    
+    if (!partidaActiva) {
+        if (numMinas.value === "" && cantApuesta.value === ""){
+            alert("Debes introducir el número de minas y  una cantidad para la apuesta");
+            return;
+        }
+        // Comprobamos si se ha introducido el número de minas
+        if (numMinas.value === "") {
+            alert("Debes introducir el número de minas");
+            return;
+        }
 
-    if (numMinas.value === "" && cantApuesta.value === ""){
-        alert("Debes introducir el número de minas y  una cantidad para la apuesta");
+        // Comprobamos si se ha introducido la cantidad de apuesta
+        if (cantApuesta.value === "") {
+            alert("Debes introducir una cantidad para la apuesta");
+            return;
+        }
+
+        const cantidad = Number(cantApuesta.value);
+        if (cantidad > sueldo) {
+            alert("No tienes suficiente sueldo para realizar esta apuesta");
+            return;
+        }
+
+        apuestaActual = cantidad;
+        sueldo = sueldo - apuestaActual;
+        actualizarSueldo();
+
+        partidaActiva = true;
+
+        // Bloqueamos los controles
+        numMinas.disabled = true;
+        cantApuesta.disabled = true;
+        puntoContTam.style.pointerEvents = "none";
+        lineaContTam.style.pointerEvents = "none";
+
+        // Si todo está rellenado, cambiamos el botón
+        textoBoton.textContent = "OBTENER";
+        actualizarCantidadObtener();
         return;
     }
-    // Comprobamos si se ha introducido el número de minas
-    if (numMinas.value === "") {
-        alert("Debes introducir el número de minas");
-        return;
-    }
 
-    // Comprobamos si se ha introducido la cantidad de apuesta
-    if (cantApuesta.value === "") {
-        alert("Debes introducir una cantidad para la apuesta");
-        return;
-    }
+    // APARTADO OBTENER
+    const multiplicador = obtenerMultiplicadorActual();
 
-    // Si todo está rellenado, cambiamos el botón
-    apostar.textContent = "OBTENER";
-
+    const cantidadObtenerValor = apuestaActual * multiplicador;
+    sueldo = sueldo + cantidadObtenerValor;
+    actualizarSueldo();
+    reiniciarPartida();
 });
 
 cantApuesta.addEventListener("input", function(){
@@ -294,6 +332,58 @@ function actualizarMultiplicadores() {
         elemento.textContent =`x${listaMultiplicadores[i].toFixed(2)}`;
         multiplicadores.appendChild(elemento);
     }
+}
+
+function obtenerMultiplicadorActual() {
+
+    if (casillasSegurasDestapadas === 0) {
+        return 1;
+    }
+    return listaMultiplicadores[casillasSegurasDestapadas - 1];
+}
+
+function actualizarCantidadObtener() {
+
+    if (!partidaActiva) {
+        cantidadObtener.textContent = "";
+        return;
+    }
+
+    const multiplicador = obtenerMultiplicadorActual();
+
+    const cantidad = apuestaActual * multiplicador;
+
+    cantidadObtener.textContent = `${cantidad.toFixed(2)} €`;
+}
+
+function actualizarSueldo() {
+    cantidadSueldo.textContent =`${sueldo.toFixed(2)} €`;
+}
+
+function reiniciarPartida() {
+
+    partidaActiva = false;
+
+    // Reiniciamos las casillas seguras descubiertas
+    casillasSegurasDestapadas = 0;
+    apuestaActual = 0;
+    cantidadObtener.textContent = "";
+
+    // Volvemos a habilitar los controles
+    numMinas.disabled = false;
+    cantApuesta.disabled = false;
+    puntoContTam.style.pointerEvents = "auto";
+    lineaContTam.style.pointerEvents = "auto";
+
+    // Volvemos al estado APОSTAR
+    textoBoton.textContent = "APOSTAR";
+
+    // Creamos un tablero nuevo
+    crearTablero();
+
+    // Recalculamos los multiplicadores
+    calcularMultiplicadores();
+    actualizarMultiplicadores();
 }
 
 // INICIALIZAR 
