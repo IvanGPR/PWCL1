@@ -28,6 +28,7 @@ tablero.style.setProperty("--tamano", tamano);
 
 
 2. Como se puede puede crear un recta interactiva, en la cual tengas un punto y este se pueda ir moviendo y cambie sus valores
+Este por desgracia tuve que entenderlo depues de tomar de referencia debido a que habia cosas que me recomendo la IA las cuales yo no conocia
 
 
 3. Como se puede hacer un cuadrado en el cual se le puedan escribir valores
