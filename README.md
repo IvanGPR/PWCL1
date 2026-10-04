@@ -10,6 +10,7 @@ para que el programa te permita jugar ya sea de poner un tamaño de tablero, una
 
 Apartir de cuando hayas completado todos los areas para poder realizar la apuesta se te permite pulsar el boton de apuesta y se te permite pinchar en los cuadrados del tablero y empezar a jugar. Segun vayas pinchando casillas se iran destapando en el caso de que estas se han bombas perderas el juego y tendras que apostar otra vez, pero si tienes suerte y es un diamante, podras seguir destapando casillas hasta que decidas pinchar en el boton que ahora pone obtener y el dinero de la apuesta que has realizado se te multiplicara por el multiplicador correspondiente a la cantidad de diamantes que has levantado y se te sumara a tu sueldo.
 
+Por último en caso de querer poner el modo oscuro este se activa con la tecla i
 
 ## Uso de IA
 Para esta practica se ha utilizado la IA (chatGPT) tanto para recordar conocimiento pasados como para distintos momentos en el transcurso de la practica

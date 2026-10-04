@@ -2,37 +2,46 @@ body {
     font-family: Arial, sans-serif;
     text-align: center;
     margin: 0;
+    background-color: #f2f4f7;
+    color: #20242a;
 }
 
+
 /* SUELDO */
+
 #sueldo {
     position: absolute;
     top: 20px;
     left: 20px;
-
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-
     font-size: 20px;
     font-weight: bold;
+    color: #343a40;
 }
 
 #cantidadSueldo {
     margin-top: 5px;
     font-size: 24px;
+    color: #198754;
 }
 
-/* TITULO */
-#titulo {
-        text-align: center;
-        font-size: 50px;
-        font-family: Arial, sans-serif;
-        margin-top: 40px;
-        margin-bottom: 40px;
-    }
 
- /* ZONA PRINCIPAL*/   
+/* TITULO */
+
+#titulo {
+    text-align: center;
+    font-size: 50px;
+    font-family: Arial, sans-serif;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    color: #212529;
+}
+
+
+/* ZONA PRINCIPAL */
+
 #zonaPrincipal {
     display: flex;
     justify-content: center;
@@ -41,32 +50,37 @@ body {
     width: 100%;
 }
 
+
 /* TABLERO */
+
 #tablero {
     display: grid;
-
     grid-template-columns: repeat(var(--tamano), 1fr);
     grid-template-rows: repeat(var(--tamano), 1fr);
-
     width: 450px;
     height: 450px;
     margin: 0;
+    padding: 5px;
+    background-color: #343a40;
+    border-radius: 10px;
 }
+
+
+/* CASILLAS */
 
 .casilla {
     position: relative;
     perspective: 1000px;
     cursor: pointer;
     box-sizing: border-box;
-    border: 1px solid black;
     display: flex;
     justify-content: center;
     align-items: center;
-    box-sizing: border-box;
 }
 
 
 /* CONTENIDO QUE GIRA */
+
 .contenidoCasilla {
     position: relative;
     width: 100%;
@@ -75,8 +89,11 @@ body {
     transition: transform 0.5s;
 }
 
-/*CARAS*/
-.frente, .reverso {
+
+/* CARAS */
+
+.frente,
+.reverso {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -84,46 +101,69 @@ body {
     justify-content: center;
     align-items: center;
     box-sizing: border-box;
-    border: 1px solid black;
+    border: 1px solid #adb5bd;
+    border-radius: 4px;
     backface-visibility: hidden;
 }
 
+
 /* CARA DELANTERA */
+
 .frente {
-    background-color: white;
+    background-color: #ffffff;
 }
 
+.frente:hover {
+    background-color: #e9ecef;
+}
+
+
 /* CARA TRASERA */
+
 .reverso {
-    background-image: url(https://gbaike-image.cdn.bcebos.com/09fa513d269759ee3d6d1ab879a354166d224f4a7135/09fa513d269759ee3d6d1ab879a354166d224f4a7135_16_9?x-bce-process=image/format,f_auto);
-    background-color: #ff0000;
+    background-image: url(diamante.jpg);
+    background-color: #198754;
     transform: rotateY(180deg);
     font-size: 25px;
     font-weight: bold;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
+
+/* MINA */
+
 .reversoMina {
-    background-color: #00ff00;
-    background-image: url(https://cdn.pixabay.com/photo/2017/01/31/16/59/bomb-2025548_640.png)
+    background-color: #dc3545;
+    background-image: url(mina.jpg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
-/*CASILLA VOLTEADA*/
+
+
+/* CASILLA VOLTEADA */
 
 .casilla.volteada .contenidoCasilla {
     transform: rotateY(180deg);
 }
 
-/*PANEL LATERAL*/
+
+/* PANEL LATERAL */
 
 #panelLateral {
     width: 260px;
     height: 450px;
-    border: 1px solid black;
+    border: 1px solid #ced4da;
     border-radius: 8px;
+    background-color: #ffffff;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 25px 20px;
+    box-shadow: 0 3px 12px #d6d9dd;
 }
 
 
@@ -145,6 +185,7 @@ body {
 #tituloTam span {
     font-size: 16px;
     font-weight: bold;
+    color: #343a40;
 }
 
 #valorTam {
@@ -153,12 +194,17 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid black;
+    border: 1px solid #ced4da;
     border-radius: 6px;
+    background-color: #f8f9fa;
+    color: #212529;
     font-size: 17px;
     font-weight: bold;
     box-sizing: border-box;
 }
+
+
+/* SELECTOR DE TAMAÑO */
 
 #selectorTam {
     display: flex;
@@ -172,6 +218,7 @@ body {
     font-weight: bold;
     width: 15px;
     flex-shrink: 0;
+    color: #495057;
 }
 
 #lineaContTam {
@@ -188,8 +235,9 @@ body {
     position: absolute;
     left: 0;
     right: 0;
-    height: 3px;
-    background-color: black;
+    height: 4px;
+    background-color: #ced4da;
+    border-radius: 5px;
 }
 
 #puntoContTam {
@@ -197,13 +245,16 @@ body {
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background-color: black;
+    background-color: #0d6efd;
+    border: 3px solid #ffffff;
     transform: translateX(-50%);
     cursor: grab;
+    box-shadow: 0 2px 6px #b8bec6;
 }
 
 
-/*CONTROL DE MINAS*/
+/* CONTROL DE MINAS */
+
 #controlNumMinas {
     width: 100%;
     margin-top: 35px;
@@ -217,55 +268,89 @@ body {
 #tituloMinas span {
     font-size: 16px;
     font-weight: bold;
+    color: #343a40;
 }
 
 #numMinas {
     width: 70px;
     height: 40px;
     box-sizing: border-box;
-    border: 1px solid black;
+    border: 1px solid #ced4da;
     border-radius: 6px;
+    background-color: #f8f9fa;
+    color: #212529;
     text-align: center;
     font-size: 17px;
     font-weight: bold;
+    outline: none;
 }
 
-#apostar{
+#numMinas:focus {
+    border-color: #0d6efd;
+}
+
+
+/* APUESTA */
+
+#apostar {
     width: 200px;
     height: 100px;
     box-sizing: border-box;
-    border: 1px solid black;
+    border: none;
     border-radius: 6px;
     text-align: center;
     font-size: 17px;
     font-weight: bold;
     margin-top: 50px;
     margin-bottom: 25px;
+    background-color: #198754;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+#apostar:hover {
+    background-color: #157347;
+}
+
+#apostar:active {
+    transform: scale(0.98);
 }
 
 #cantidadObtener {
     margin-top: 10px;
     font-size: 18px;
     font-weight: bold;
+    color: #ffffff;
 }
 
 #tituloApuesta {
     font-size: 16px;
     font-weight: bold;
+    color: #343a40;
 }
 
 #cantApuesta {
     width: 70px;
     height: 40px;
     box-sizing: border-box;
-    border: 1px solid black;
+    border: 1px solid #ced4da;
     border-radius: 6px;
+    background-color: #f8f9fa;
+    color: #212529;
     text-align: center;
     font-size: 17px;
     font-weight: bold;
+    outline: none;
 }
 
+#cantApuesta:focus {
+    border-color: #0d6efd;
+}
+
+
 /* COLUMNA DE MULTIPLICADORES */
+
 #multiplicadores {
     width: 150px;
     height: 450px;
@@ -275,19 +360,91 @@ body {
     gap: 10px;
 }
 
+
+/* MULTIPLICADOR */
+
 .multiplicador {
     width: 130px;
     height: 55px;
-    border: 1px solid black;
+    border: 1px solid #ced4da;
     border-radius: 6px;
+    background-color: #ffffff;
+    color: #495057;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 18px;
     font-weight: bold;
     box-sizing: border-box;
+    transition: background-color 0.2s, border-color 0.2s;
 }
 
+
+/* MULTIPLICADOR ACTUAL */
+
 .multiplicador.actual {
-    background-color: #eeeeee;
+    background-color: #0d6efd;
+    border-color: #0b5ed7;
+    color: #ffffff;
+    box-shadow: 0 3px 8px #b6cdf5;
+}
+
+
+/* INPUTS DESACTIVADOS */
+
+input:disabled {
+    background-color: #e9ecef;
+    color: #6c757d;
+    cursor: not-allowed;
+}
+
+
+/* MODO OSCURO (con tecla i)*/
+
+body.dark-mode {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+/* Títulos y textos principales */
+body.dark-mode #titulo,
+body.dark-mode #sueldo,
+body.dark-mode #tituloTam span,
+body.dark-mode #tituloMinas span,
+body.dark-mode #tituloApuesta,
+body.dark-mode .extremo {
+    color: #e0e0e0;
+}
+
+/* Panel lateral y tarjetas */
+body.dark-mode #panelLateral,
+body.dark-mode .multiplicador {
+    background-color: #1e1e1e;
+    border-color: #333333;
+    color: #ffffff;
+    box-shadow: 0 3px 12px #0a0a0a;
+}
+
+/* Elementos de entrada y valores */
+body.dark-mode #valorTam,
+body.dark-mode #numMinas,
+body.dark-mode #cantApuesta {
+    background-color: #2a2a2a;
+    color: #ffffff;
+    border-color: #444444;
+}
+
+body.dark-mode input:disabled {
+    background-color: #1a1a1a;
+    color: #666666;
+}
+
+/* Casillas del tablero */
+body.dark-mode .frente {
+    background-color: #2c3036;
+    border-color: #444444;
+}
+
+body.dark-mode .frente:hover {
+    background-color: #3b4048;
 }

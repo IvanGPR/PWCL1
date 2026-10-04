@@ -108,8 +108,12 @@ function clickCasilla(event) {
     }
      // Si es una mina
     else {
-        alert("¡Has encontrado una mina!");
-        reiniciarPartida();
+        partidaActiva = false;
+        setTimeout(() => {
+            reiniciarPartida();
+            alert("Te exploto una mina");
+        }, 1000);
+
     }
 }
 
@@ -447,6 +451,21 @@ function reiniciarPartida() {
     actualizarMultiplicadores();
 }
 
+// MODO OSCURO
+function manejarTecladoModoOscuro(event) {
+
+    // Comprobamos si el usuario está escribiendo para evitar errores
+    const elementoActivo = document.activeElement;
+    const esInput = elementoActivo.tagName === "INPUT" || elementoActivo.tagName === "TEXTAREA" || elementoActivo.isContentEditable;
+
+    if (esInput) {
+        return;
+    }
+
+    if (event.key === "i" || event.key === "I") {
+        document.body.classList.toggle("dark-mode");
+    }
+}
 
 // REGISTRO DE TODOS LOS EVENTOS
 
@@ -472,6 +491,8 @@ apostar.addEventListener("click",manejarClickApuesta);
 // Cantidad de apuesta
 cantApuesta.addEventListener("input",manejarCambioApuesta);
 
+//Modo Oscuro
+document.addEventListener("keydown", manejarTecladoModoOscuro);
 
 // INICIALIZACIÓN
 crearTablero();
