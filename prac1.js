@@ -1,9 +1,8 @@
 
 let tamano = 3;
-
 let partidaActiva = false;
-const tablero = document.getElementById("tablero");
 
+const tablero = document.getElementById("tablero");
 const lineaContTam = document.getElementById("lineaContTam");
 const puntoContTam = document.getElementById("puntoContTam");
 const valorTam = document.getElementById("valorTam");
@@ -21,32 +20,27 @@ let listaMultiplicadores = [];
 const cantidadSueldo = document.getElementById("cantidadSueldo");
 const cantidadObtener = document.getElementById("cantidadObtener");
 const textoBoton = document.getElementById("textoBoton");
+
 let sueldo = 1000;
 let apuestaActual = 0;
 
-// CREADOR TABLERO
+
+// CREAR TABLERO
 function crearTablero() {
 
-    // Borramos las casillas anteriores
     tablero.innerHTML = "";
 
     // Indicamos el tamaño al CSS
     tablero.style.setProperty("--tamano", tamano);
 
-    // Número de minas seleccionadas
     const cantidadMinas = Number(numMinas.value);
-
-    // Creamos una lista con todas las posiciones posibles
     const posiciones = [];
 
     for (let i = 0; i < tamano * tamano; i++) {
         posiciones.push(i);
     }
 
-    // Mezclamos aleatoriamente las posiciones
     posiciones.sort(() => Math.random() - 0.5);
-
-    // Las primeras posiciones serán minas
     const posicionesMinas = posiciones.slice(0, cantidadMinas);
 
     // Creamos las casillas
@@ -72,70 +66,66 @@ function crearTablero() {
             reverso.classList.add("reversoMina");
         }
 
-        // Montar las dos caras
         contenido.appendChild(frente);
         contenido.appendChild(reverso);
 
         casilla.appendChild(contenido);
         tablero.appendChild(casilla);
 
-        // GIRAR CASILLA
-        casilla.addEventListener("click", function() {
-
-            // No se pueden pulsar casillas antes de empezar partida
-            if (!partidaActiva) {
-                return;
-            }
-
-            // Una casilla solo puede pulsarse una vez
-            if (casilla.classList.contains("volteada")) {
-                return;
-            }
-
-            // Comprobamos si esta casilla es una mina
-            const esMina = reverso.classList.contains("reversoMina");
-
-            // Volteamos la casilla
-            casilla.classList.add("volteada");
-
-            // Si NO es una mina
-            if (!esMina) {
-
-                casillasSegurasDestapadas++;
-                // Actualizamos los multiplicadores
-                actualizarMultiplicadores();
-                actualizarCantidadObtener();
-            }
-
-            // Si es una mina
-            else {
-                // De momento solamente mostramos un mensaje
-                alert("¡Has encontrado una mina!");
-                reiniciarPartida();
-            }
-        });
+        casilla.addEventListener("click", clickCasilla);
     }
 }
 
 
-// ACTUALIZAR SELECTOR
+
+// CLICK EN UNA CASILLA
+function clickCasilla(event) {
+
+    const casilla = event.currentTarget;
+
+
+    if (!partidaActiva) {
+        return;
+    }
+
+    if (casilla.classList.contains("volteada")) {
+        return;
+    }
+
+    const reverso = casilla.querySelector(".reverso");
+    const esMina = reverso.classList.contains("reversoMina");
+
+    casilla.classList.add("volteada");
+
+    // NO es una mina
+    if (!esMina) {
+
+        casillasSegurasDestapadas++;
+
+        actualizarMultiplicadores();
+        actualizarCantidadObtener();
+
+    }
+     // Si es una mina
+    else {
+        alert("¡Has encontrado una mina!");
+        reiniciarPartida();
+    }
+}
+
+// ACTUALIZAR SELECTOR DE TAMAÑO
 
 function actualizarSelectorTam() {
 
     valorTam.textContent = `${tamano}x${tamano}`;
-
-    // Posición del punto
     const porcentaje = (tamano - 3) / (9 - 3);
     puntoContTam.style.left = `${porcentaje * 100}%`;
-
-    // Actualizar cantidad máxima de minas
     actualizarMaxMinas();
 }
 
 
 
 // CAMBIAR TAMAÑO SEGÚN POSICIÓN DEL RATÓN
-
 function cambiarTam(event) {
 
     const rect = lineaContTam.getBoundingClientRect();
@@ -152,52 +142,65 @@ function cambiarTam(event) {
 
     casillasSegurasDestapadas = 0;
 
-    crearTablero(); 
-    actualizarSelectorTam(); 
+    crearTablero();
+    actualizarSelectorTam();
     calcularMultiplicadores();
     actualizarMultiplicadores();
 }
 
 
 
-// ARRASTRAR PUNTO
+// EVENTOS DEL SELECTOR DE TAMAÑO
+// Comenzar a arrastrar el punto
+function manejarPointerDownPunto(event) {
 
-puntoContTam.addEventListener("pointerdown", function(event) {
     moviendo = true;
+
     puntoContTam.setPointerCapture(event.pointerId);
+
     event.preventDefault();
-});
+}
 
 
-puntoContTam.addEventListener("pointermove", function(event) {
+// Mover el punto
+function manejarPointerMovePunto(event) {
+
     if (!moviendo) {
         return;
     }
+
     cambiarTam(event);
-});
+}
 
 
-puntoContTam.addEventListener("pointerup", function() {
+// Soltar el punto
+function manejarPointerUpPunto() {
+
     moviendo = false;
-});
+}
 
 
-puntoContTam.addEventListener("pointercancel", function() {
+// Cancelar el movimiento
+function manejarPointerCancelPunto() {
+
     moviendo = false;
-});
+}
 
 
-// HACER CLIC DIRECTAMENTE EN LA LÍNEA
-lineaContTam.addEventListener("pointerdown", function(event) {
+// Hacer clic directamente sobre la línea
+function manejarPointerDownLinea(event) {
 
+    // Si se ha pulsado sobre el punto, no hacemos nada
     if (event.target === puntoContTam) {
         return;
     }
+
     cambiarTam(event);
-});
+}
 
 
-// ACTUALIZADOR NUMERO DE MINAS
+
+// ACTUALIZAR NÚMERO MÁXIMO DE MINAS
 function actualizarMaxMinas() {
 
     const numeroCasillas = tamano * tamano;
@@ -212,7 +215,11 @@ function actualizarMaxMinas() {
     }
 }
 
-numMinas.addEventListener("input", function() {
+
+
+// CAMBIO DEL NÚMERO DE MINAS
+function manejarCambioMinas() {
+
     const maxMinas = tamano * tamano - 1;
     let minas = Number(numMinas.value);
 
@@ -223,74 +230,111 @@ numMinas.addEventListener("input", function() {
     if (minas > maxMinas) {
         numMinas.value = maxMinas;
     }
+
     casillasSegurasDestapadas = 0;
 
     crearTablero();
     calcularMultiplicadores();
     actualizarMultiplicadores();
-});
+}
 
-apostar.addEventListener("click", function() {
-    
+
+
+// BOTON APOSTAR / OBTENER
+function manejarClickApuesta() {
+
+    // APOSTAR
+
     if (!partidaActiva) {
-        if (numMinas.value === "" && cantApuesta.value === ""){
-            alert("Debes introducir el número de minas y  una cantidad para la apuesta");
-            return;
-        }
-        // Comprobamos si se ha introducido el número de minas
-        if (numMinas.value === "") {
-            alert("Debes introducir el número de minas");
+
+        // No se ha introducido ningún dato
+        if (numMinas.value === "" && cantApuesta.value === "") {
+
+            alert(
+                "Debes introducir el número de minas y una cantidad para la apuesta"
+            );
+
             return;
         }
 
-        // Comprobamos si se ha introducido la cantidad de apuesta
+        // No se ha introducido el número de minas
+        if (numMinas.value === "") {
+
+            alert("Debes introducir el número de minas");
+
+            return;
+        }
+
+        // No se ha introducido la cantidad de apuesta
         if (cantApuesta.value === "") {
+
             alert("Debes introducir una cantidad para la apuesta");
+
             return;
         }
 
         const cantidad = Number(cantApuesta.value);
+
+        // Comprobamos que haya suficiente sueldo
         if (cantidad > sueldo) {
-            alert("No tienes suficiente sueldo para realizar esta apuesta");
+
+            alert(
+                "No tienes suficiente sueldo para realizar esta apuesta"
+            );
+
             return;
         }
 
+
         apuestaActual = cantidad;
         sueldo = sueldo - apuestaActual;
+
         actualizarSueldo();
 
+        // Comenzamos la partida
         partidaActiva = true;
 
         // Bloqueamos los controles
         numMinas.disabled = true;
         cantApuesta.disabled = true;
+
         puntoContTam.style.pointerEvents = "none";
         lineaContTam.style.pointerEvents = "none";
 
-        // Si todo está rellenado, cambiamos el botón
         textoBoton.textContent = "OBTENER";
+
         actualizarCantidadObtener();
+
         return;
     }
 
-    // APARTADO OBTENER
-    const multiplicador = obtenerMultiplicadorActual();
 
+    // APARTADO OBTENER
+
+    const multiplicador = obtenerMultiplicadorActual();
     const cantidadObtenerValor = apuestaActual * multiplicador;
     sueldo = sueldo + cantidadObtenerValor;
+
     actualizarSueldo();
     reiniciarPartida();
-});
+}
 
-cantApuesta.addEventListener("input", function(){
-    const maxApuesta=1000;
-    let apuesta = Number(cantApuesta.value)
-    
-    if(apuesta>maxApuesta){
+
+// CAMBIO DE LA APUESTA
+
+function manejarCambioApuesta() {
+
+    const maxApuesta = sueldo;
+
+    let apuesta = Number(cantApuesta.value);
+
+    if (apuesta > maxApuesta) {
         cantApuesta.value = maxApuesta;
     }
+}
 
-});
+
+// CALCULAR MULTIPLICADORES
 
 function calcularMultiplicadores() {
 
@@ -306,10 +350,9 @@ function calcularMultiplicadores() {
 
         const casillasRestantes = totalCasillas - i;
         const segurasRestantes = casillasSeguras - i;
+        const probabilidad = segurasRestantes / casillasRestantes;
 
-        const probabilidad =segurasRestantes / casillasRestantes;
-
-        probabilidadAcumulada =probabilidadAcumulada * probabilidad;
+        probabilidadAcumulada = probabilidadAcumulada * probabilidad;
 
         const multiplicador = 1 / probabilidadAcumulada;
 
@@ -317,6 +360,8 @@ function calcularMultiplicadores() {
     }
 }
 
+
+// ACTUALIZAR MULTIPLICADORES
 
 function actualizarMultiplicadores() {
 
@@ -327,20 +372,32 @@ function actualizarMultiplicadores() {
     const fin = Math.min(inicio + 6,listaMultiplicadores.length);
 
     for (let i = inicio; i < fin; i++) {
+
         const elemento = document.createElement("div");
+
         elemento.classList.add("multiplicador");
+
         elemento.textContent =`x${listaMultiplicadores[i].toFixed(2)}`;
+
         multiplicadores.appendChild(elemento);
     }
 }
+
+
+
+// OBTENER MULTIPLICADOR ACTUAL
 
 function obtenerMultiplicadorActual() {
 
     if (casillasSegurasDestapadas === 0) {
         return 1;
     }
+
     return listaMultiplicadores[casillasSegurasDestapadas - 1];
 }
+
+
+// ACTUALIZAR CANTIDAD A OBTENER
 
 function actualizarCantidadObtener() {
 
@@ -349,45 +406,75 @@ function actualizarCantidadObtener() {
         return;
     }
 
-    const multiplicador = obtenerMultiplicadorActual();
-
-    const cantidad = apuestaActual * multiplicador;
-
-    cantidadObtener.textContent = `${cantidad.toFixed(2)} €`;
+    const multiplicador =obtenerMultiplicadorActual();
+    const cantidad =apuestaActual * multiplicador;
+    cantidadObtener.textContent =`${cantidad.toFixed(2)} €`;
 }
+
+
+
+// ACTUALIZAR SUELDO
 
 function actualizarSueldo() {
+
     cantidadSueldo.textContent =`${sueldo.toFixed(2)} €`;
 }
+
+
+
+// REINICIAR PARTIDA
 
 function reiniciarPartida() {
 
     partidaActiva = false;
-
-    // Reiniciamos las casillas seguras descubiertas
     casillasSegurasDestapadas = 0;
     apuestaActual = 0;
+
     cantidadObtener.textContent = "";
 
     // Volvemos a habilitar los controles
     numMinas.disabled = false;
     cantApuesta.disabled = false;
+
     puntoContTam.style.pointerEvents = "auto";
     lineaContTam.style.pointerEvents = "auto";
 
-    // Volvemos al estado APОSTAR
     textoBoton.textContent = "APOSTAR";
 
-    // Creamos un tablero nuevo
-    crearTablero();
 
-    // Recalculamos los multiplicadores
+    crearTablero();
     calcularMultiplicadores();
     actualizarMultiplicadores();
 }
 
-// INICIALIZAR 
-crearTablero(); 
+
+// REGISTRO DE TODOS LOS EVENTOS
+
+// Selector de tamaño
+puntoContTam.addEventListener("pointerdown",manejarPointerDownPunto);
+
+puntoContTam.addEventListener("pointermove",manejarPointerMovePunto);
+
+puntoContTam.addEventListener("pointerup",manejarPointerUpPunto);
+
+puntoContTam.addEventListener("pointercancel",manejarPointerCancelPunto);
+
+lineaContTam.addEventListener("pointerdown",manejarPointerDownLinea);
+
+
+// Número de minas
+numMinas.addEventListener("input", manejarCambioMinas);
+
+// Botón apostar / obtener
+apostar.addEventListener("click",manejarClickApuesta);
+
+
+// Cantidad de apuesta
+cantApuesta.addEventListener("input",manejarCambioApuesta);
+
+
+// INICIALIZACIÓN
+crearTablero();
 actualizarSelectorTam();
 calcularMultiplicadores();
 actualizarMultiplicadores();
