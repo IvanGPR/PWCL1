@@ -95,6 +95,7 @@ body {
 
 /* CARA TRASERA */
 .reverso {
+    background-image: url(https://gbaike-image.cdn.bcebos.com/09fa513d269759ee3d6d1ab879a354166d224f4a7135/09fa513d269759ee3d6d1ab879a354166d224f4a7135_16_9?x-bce-process=image/format,f_auto);
     background-color: #ff0000;
     transform: rotateY(180deg);
     font-size: 25px;
@@ -103,6 +104,7 @@ body {
 
 .reversoMina {
     background-color: #00ff00;
+    background-image: url(https://cdn.pixabay.com/photo/2017/01/31/16/59/bomb-2025548_640.png)
 }
 /*CASILLA VOLTEADA*/
 
